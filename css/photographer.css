@@ -45,29 +45,32 @@
 }
 
 .container_media img {
-    width: 350px;
+    width: 100%;
     height: 300px;
     object-fit: cover;
-    object-position: 10px 10px;
+    cursor: pointer;
 }
 
 .container_media video {
-    width: 350px;
+    width: 100%;
     height: 300px;
+    object-fit: cover;
 }
 
 .main_container_media {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
+    margin: 0 100px;
 }
 
 .details_media {
     display: flex;
     justify-content: space-between;
-    width: 331px;
+    width: 90%;
     margin: 0px 10px;
     color: #901C1C;
+    align-items: baseline;
 }
 
 .details_media h3 {
@@ -84,9 +87,16 @@
     right: 25px;
     background-color: #DB8876;
     color: #000;
+    margin: 0;
+    padding: 25px;
+    font-size: 24px;
+    width: 280px;
+    height: 25px;
+    text-align: center;
 }
 
-.contact_button {
+.contact_button,
+#submitForm {
     font-size: 20px;
     font-weight: bold;
     color: white;
@@ -111,7 +121,7 @@
     margin: auto;
     position: absolute;
     left: 30%;
-    top: 30%;
+    top: 10%;
 }
 
 .modal header {
@@ -154,4 +164,89 @@ form input {
     height: 68px;
     border: none;
     border-radius: 5px;
+    font-size: 35px;
 }
+
+form div:last-of-type textarea {
+    height: 140px;
+    width: 100%;
+    font-size: 35px;
+}
+
+/* Lightbox */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .90);
+    z-index: 2;
+    overflow: auto;
+    animation: lightboxIn .5;
+}
+
+.lightbox_next,
+.lightbox_prev {
+    background: url(../assets/icons/arrow.svg) center center;
+    background-repeat: no-repeat;
+    padding: 0px 40px;
+    width: 30px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 3;
+    text-indent: -4000px;
+    cursor: pointer;
+    border: none;
+
+}
+
+.lightbox_prev {
+    right: auto;
+    left: 0;
+    transform: rotate(180deg)
+}
+
+.lightbox_close {
+    width: 72px;
+    height: 72px;
+    background: url(../assets/icons/closeLightbox.svg) center center no-repeat;
+    border: none;
+    position: fixed;
+    text-indent: -4000px;
+    top: 25px;
+    right: 85px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.lightbox_container img {
+    max-width: 100%;
+    height: auto;
+    animation: lightboxIn .5;
+}
+
+.lightbox_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 70px;
+    margin-right: 70px;
+    min-height: 100%;
+
+}
+
+@keyframes lightboxIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Lightbox */

@@ -3,8 +3,8 @@ async function getPhotographers() {
     // mais il sera à remplacer avec une requête sur le fichier JSON en utilisant "fetch".
 
     let response = await fetch("http://localhost:5500/././data/photographers.json")
-    let photographers = await response.json()
-    photographers = photographers.photographers
+    let { photographers } = await response.json()
+
     //  [
     //     {
     //         "name": "Ma data test",

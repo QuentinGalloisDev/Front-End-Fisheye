@@ -11,7 +11,8 @@
 
 <body>
   <header>
-    <a href="index.html"> <img src="assets/images/logo.png" class="logo" /></a>
+    <a href="index.html" aria-label="Le logo Fisheye. Lien vers la page d'accueil du site"> <img
+        src="assets/images/logo.png" class="logo" alt="Le logo Fisheye" /></a>
   </header>
   <main id="main">
     <div class="photograph-header">
@@ -26,13 +27,36 @@
       </header>
       <form>
         <div>
-          <label>Prénom</label>
-          <input />
+          <label for="firstName">Prénom</label>
+          <input type="text" id="firstName" />
         </div>
-        <button class="contact_button">Envoyer</button>
+        <div>
+          <label for="Name">Nom</label>
+          <input type="text" id="name" />
+        </div>
+        <div>
+          <label for="mail">Email</label>
+          <input type="email" id="email" />
+        </div>
+        <div>
+          <label for="message">Votre message</label>
+          <textarea id="message" name="message" rows="5" cols="20"></textarea>
+        </div>
+
       </form>
+      <input type="submit" value="Envoyer" id="submitForm" />
     </div>
   </div>
+  <!-- Lightbox -->
+  <!-- <div class="lightbox">
+    <button class="lightbox_close">Fermer</button>
+    <button class="lightbox_next">Suivant</button>
+    <button class="lightbox_prev">Précédent</button>
+    <div class="lightbox_container">
+       <img> -->
+  <!-- </div>
+  </div>  -->
+  <!-- Lightbox -->
   <script src="scripts/templates/photographer.js"></script>
   <script src="scripts/templates/medias.js"></script>
   <script src="scripts/pages/photographer.js"></script>
