@@ -2,6 +2,8 @@ function mediaTemplate(media, photographeName) {
     const { date, id, image, video, likes, photographerId, price, title } = media;
     const photoMedia = `assets/photographers/${photographeName}/${image}`
     const videoMedia = `assets/photographers/${photographeName}/${video}`
+    // gallery.push(photoMedia)
+    // console.log(gallery)
     //On créer une fonction pour afficher les médias sur la page
     function getUserMediaDOM() {
         //On créer les éléments dans le DOM
@@ -19,6 +21,7 @@ function mediaTemplate(media, photographeName) {
             container.appendChild(photo)
             photo.setAttribute("src", photoMedia)
             photo.setAttribute("id", id)
+            photo.setAttribute("alt", `La photo de ${title}`)
         }
         else {
             const lecteur = document.createElement("video")
@@ -40,31 +43,44 @@ function mediaTemplate(media, photographeName) {
         container.addEventListener("click", (e) => {
 
             e.preventDefault()
-            getUrlPhoto(photoMedia)
+            getUrlPhoto(photoMedia, videoMedia)
             // createLightbox()
 
-            function getUrlPhoto(url) {
-                const element = buildDomLightbox(url)
-                console.log(element)
+            function getUrlPhoto(url, urlVideo) {
+                const element = insertDomLightbox(url, urlVideo)
+
                 document.body.appendChild(element)
             }
             // On créer la structure de la lightbox avec l'url en variable.
-            function buildDomLightbox(url) {
+            function insertDomLightbox(url, urlVideo) {
+                const testImage = /(?:jpg)$|(?:png)$/g
+                const lightbox = document.querySelector(".lightbox")
+                lightbox.style.display = "block"
+                const picture = document.querySelector(".lightbox .lightbox_container img")
+                const video = document.querySelector(".lightbox .lightbox_container video")
+                if (testImage.test(url)) {
+                    // Si il y a une image (test avec cette regex : (?:jpg)$|(?:png)$) ) on créé une image
+                    video.style.display = "none"
+                    picture.style.display = "block"
+                    picture.src = url
+                }
+                else {
+                    picture.style.display = "none"
+                    video.style.display = "block"
+                    video.src = urlVideo
+                }
 
-                const domlightbox = document.createElement("div")
-                domlightbox.setAttribute("class", "lightbox")
-                domlightbox.style.display = "block"
-                domlightbox.innerHTML = `<button class="lightbox_close">Fermer</button>
-            <button class="lightbox_next">Suivant</button>
-            <button class="lightbox_prev">Précédent</button>
-            <div class="lightbox_container">
-               <img src="${url}"> 
-            </div>`
+
                 // On ajoute un écouteur d'évènement sur l'élément close qui va fermer la lightbox au click
-                domlightbox.querySelector(".lightbox_close").addEventListener("click", e => {
-                    domlightbox.style.display = "none"
+                lightbox.querySelector(".lightbox_close").addEventListener("click", e => {
+                    lightbox.style.display = "none"
                 })
-                return domlightbox
+                window.addEventListener("keydown", (event) => {
+                    if (event.key === "Escape") {
+                        lightbox.style.display = "none"
+                    }
+                })
+                return lightbox
 
             }
         }

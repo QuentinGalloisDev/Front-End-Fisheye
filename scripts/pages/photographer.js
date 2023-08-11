@@ -7,7 +7,7 @@
 async function getPromesse() {
     // let params = (new URL(document.location)).searchParams
     // let id = params.get('id')
-    let response = await fetch("http://localhost:5500/././data/photographers.json")
+    let response = await fetch("../../data/photographers.json")
     let photographers = await response.json()
     photographers = photographers.photographers
 
@@ -18,7 +18,7 @@ async function getPromesse() {
     // })
 }
 async function getMedia() {
-    let responseMedia = await fetch("http://localhost:5500/././data/photographers.json")
+    let responseMedia = await fetch("../../data/photographers.json")
     let medias = await responseMedia.json()
     medias = medias.media
     // console.log(medias)
@@ -39,8 +39,6 @@ async function getPhotographer() {
     return ({ photographe })
 }
 
-
-
 async function getMediaPhotographe() {
     const { medias } = await getMedia()
     const id = getId()
@@ -48,7 +46,6 @@ async function getMediaPhotographe() {
     // console.log(mediaPhotographe)
     return mediaPhotographe
 }
-
 
 async function createPhotographerDisplay(artist, media) {
 
@@ -78,6 +75,7 @@ async function createPhotographerDisplay(artist, media) {
     paragraphLocation.textContent = `${artist.city}, ${artist.country}`
     paragraphTagline.textContent = artist.tagline
     img.setAttribute('src', portrait)
+    img.setAttribute("alt", `Le portrait de ${artist.name}`)
     // On calcul le nombre total de likes
     let sum = media.map(likes => { return likes.likes })
     const initialValue = 0;
@@ -92,119 +90,113 @@ async function createMediaDisplay(medias, photographName) {
     const main = document.querySelector("#main")
     const mainContainerMedia = document.createElement("div")
     mainContainerMedia.setAttribute("class", "main_container_media")
-
     medias.forEach(media => {
         const mediaModel = mediaTemplate(media, photographName)
+
         const mediaDisplayDom = mediaModel.getUserMediaDOM()
         main.appendChild(mainContainerMedia)
         mainContainerMedia.appendChild(mediaDisplayDom)
     });
+
 }
 async function displayPhotographe() {
     const { photographe } = await getPhotographer()
     const mediaPhotographe = await getMediaPhotographe()
     createPhotographerDisplay(photographe, mediaPhotographe)
+    // const gallery = mediaPhotographe.map(e => { return e.image })
+    // console.log(gallery)
     createMediaDisplay(mediaPhotographe, photographe.name)
 
-    console.log(photographe)
+    //On récupére les photos de l'objet mediaPhotographe
     console.log(mediaPhotographe)
+    //SI ça finis par jpg retourn l'url de l'image sinon retourne l'url de la video
+    const testIfImage = /(?:jpg)$|(?:png)$/g
+    let gallery = mediaPhotographe.map(src => {
+        if (src.image) { return `assets/photographers/${photographe.name}/${src.image}` }
+        else { return `assets/photographers/${photographe.name}/${src.video}` }
+    })
+    // console.log(gallery)
 
-    // On récupére toutes les photos qui s'affiche.
-    let allPhotos = Array.from(document.querySelectorAll(".container_media img"))
-    const gallery = allPhotos.map(image => image.getAttribute('src'))
+    function goToNext() {
+        // récupère la src de l'image en cours
+        let image = document.querySelector(".lightbox img")
+        let src = image.getAttribute("src")
+        let video = document.querySelector(".lightbox video")
 
-    //Pour chaque photo on ajoute un écouteur d'évènement click
-    // allPhotos.forEach(photo => photo.addEventListener("click", e => {
-    //     e.preventDefault()
-    //     // On importe la structure de la lightbox dans le body
-    //     function getUrlPhoto(url) {
-    //         const element = buildDomLightbox(url)
-    //         document.body.appendChild(element)
-    //     }
-    // On créer la structure de la lightbox avec l'url en variable.
-    // function buildDomLightbox(url) {
-    //     const domlightbox = document.createElement("div")
-    //     domlightbox.setAttribute("class", "lightbox")
-    //     domlightbox.style.display = "block"
-    //     domlightbox.innerHTML = ` <button class="lightbox_close">Fermer</button>
-    // <button class="lightbox_next">Suivant</button>
-    // <button class="lightbox_prev">Précédent</button>
-    // <div class="lightbox_container">
-    //    <img src="${url}"> 
-    // </div>`
+        console.log(src)
+        //Si la src finis par mp4 on créé un élément video
+        const testVideo = /(?:mp4)$/g
+        // récupère l'index de la photo en cours
+        let i = gallery.findIndex(image => image === src)
+        // Si on arrive à la fin du tableau on l'index reviens au début 
+        if (i >= gallery.length - 1) {
+            i = -1
+            image.setAttribute("src", gallery[i])
+            // 
+        }
+        image.setAttribute("src", gallery[i + 1])
+        video.setAttribute("src", gallery[i + 1])
+        let srcVideo = video.getAttribute("src")
+        if (testVideo.test(srcVideo) === false) {
+            image.style.display = "flex"
+            video.style.display = "none"
 
+        }
+        else {
+            video.style.display = "block"
+        }
+    }
+    function goToPrev() {
+        // récupère la src de l'image en cours
+        let image = document.querySelector(".lightbox img")
+        let src = image.getAttribute("src")
+        let video = document.querySelector(".lightbox video")
 
-
-    // On ajoute un écouteur d'évènement sur l'élément close qui va fermer la lightbox au click
-    // domlightbox.querySelector(".lightbox_close").addEventListener("click", e => {
-    //     domlightbox.style.display = "none"
-    // })
-    // domlightbox.querySelector(".lightbox_next").addEventListener("click", e => {
-    //     let attributeSrc = photo.getAttribute("src")
-    //     // nextImage(gallery, attributeSrc)
-    //     let i = gallery.findIndex(image => image === attributeSrc)
-    //     if (i === gallery.length - 1) {
-    //         i = -1
-    //     }
-
-    //     const containerImage = document.querySelector(".lightbox_container")
-    //     containerImage.innerHTML = ""
-    //     const image = document.querySelector("img")
-    //     containerImage.appendChild(image)
-    //     console.log(i)
-
-
-
-    // })
-    // domlightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
-    //     prevImage(gallery, attributeSrc)
-    // })
-
-    function nextImage(gallery, attributeSrc) {
-        // let i = gallery.findIndex(image => image === attributeSrc)
-        // if (i === gallery.length - 1) {
-        //     i = -1
-        // }
-
-        // const container = document.querySelector(".lightbox_container")
-        // container.innerHTML = ""
-        // const image = document.createElement("img")
-        // container.appendChild(image)
-
-        // console.log(i)
-        // image.src = gallery[i + 1]
-        // console.log(i)
-        // loadImage(gallery[i + 1])
+        const testVideo = /(?:mp4)$/g
+        console.log(src)
+        // récupère l'index de la photo en cours
+        let i = gallery.findIndex(image => image === src)
+        // si on arrive au début du tableau, on reviens à la fin
+        if (i === 0) {
+            i = gallery.length
+        }
+        video.setAttribute("src", gallery[i - 1])
+        image.setAttribute("src", gallery[i - 1])
+        let srcVideo = video.getAttribute("src")
+        if (testVideo.test(srcVideo) === false) {
+            video.style.display = "none"
+        }
+        else {
+            video.style.display = "block"
+        }
 
     }
-    function prevImage(gallery, attributeSrc) {
-        // let i = gallery.findIndex(image => image === attributeSrc)
-        // if (i === gallery.length - 1) {
-        //     i = -1
-        // }
 
-        // loadImage(gallery[i - 1])
-        // console.log(i)
-    }
-    // function loadImage(src) {
+    let next = document.querySelector(".lightbox .lightbox_next")
+    next.addEventListener("click", e => {
+        goToNext()
 
-    //     const container = document.querySelector(".lightbox_container")
-    //     container.innerHTML = ""
-    //     const image = document.createElement("img")
-    //     container.appendChild(image)
-    //     image.src = src
+    })
 
-    // }
-    // return domlightbox
-    // }
-    // Fin domlightbox
+    window.addEventListener("keydown", (event) => {
+        let lightboxOpen = document.querySelector(".lightbox")
+        if (lightboxOpen.style.display === "block") {
+            switch (event.key) {
+                case "ArrowRight":
+                    goToNext()
+                    break;
 
+                case "ArrowLeft":
+                    goToPrev()
+                    break;
+            }
+        }
+    })
+    let prev = document.querySelector(".lightbox .lightbox_prev")
+    prev.addEventListener("click", e => {
 
-    // getUrlPhoto(photo.src)
-    // })
-
-    // )
-
+        goToPrev()
+    })
 
 }
 displayPhotographe()
