@@ -1,5 +1,5 @@
-function mediaTemplate(media, photographeName) {
-    const { date, id, image, video, likes, photographerId, price, title } = media;
+function mediaTemplate(media, photographeName, gallery) {
+    let { date, id, image, video, likes, photographerId, price, title } = media;
     const photoMedia = `assets/photographers/${photographeName}/${image}`
     const videoMedia = `assets/photographers/${photographeName}/${video}`
     // gallery.push(photoMedia)
@@ -14,10 +14,10 @@ function mediaTemplate(media, photographeName) {
         details.setAttribute("class", "details_media")
         const titre = document.createElement("h3")
         const likesNumber = document.createElement("p")
-
+        const photo = document.createElement("img")
         main.appendChild(container)
         if (media.hasOwnProperty('image')) {
-            const photo = document.createElement("img")
+
             container.appendChild(photo)
             photo.setAttribute("src", photoMedia)
             photo.setAttribute("id", id)
@@ -37,40 +37,51 @@ function mediaTemplate(media, photographeName) {
 
         // On insère les données
         titre.textContent = title
+        likesNumber.setAttribute("class", "a b")
         likesNumber.textContent = `${likes} ♥`
         // On créer la lightbox
+        // likesNumber.addEventListener("click", (e) => {
+        //     likesNumber.textContent = `${likes++} ♥`
+        // })
 
-        container.addEventListener("click", (e) => {
+        container.querySelector("img, video").addEventListener("click", (e) => {
 
             e.preventDefault()
-            getUrlPhoto(photoMedia, videoMedia)
+            getUrlPhoto(photoMedia, videoMedia, gallery)
             // createLightbox()
 
-            function getUrlPhoto(url, urlVideo) {
-                const element = insertDomLightbox(url, urlVideo)
+            function getUrlPhoto(url, urlVideo, gallery) {
+                const element = insertDomLightbox(url, urlVideo, gallery)
 
                 document.body.appendChild(element)
             }
             // On créer la structure de la lightbox avec l'url en variable.
-            function insertDomLightbox(url, urlVideo) {
+            function insertDomLightbox(url, urlVideo, gallery) {
                 const testImage = /(?:jpg)$|(?:png)$/g
                 const lightbox = document.querySelector(".lightbox")
                 lightbox.style.display = "block"
                 const picture = document.querySelector(".lightbox .lightbox_container img")
                 const video = document.querySelector(".lightbox .lightbox_container video")
+
+
+
                 if (testImage.test(url)) {
                     // Si il y a une image (test avec cette regex : (?:jpg)$|(?:png)$) ) on créé une image
                     video.style.display = "none"
+                    video.src = ""
                     picture.style.display = "block"
                     picture.src = url
+                    picture.id = id
                 }
                 else {
                     picture.style.display = "none"
                     video.style.display = "block"
                     video.src = urlVideo
+                    video.id = id
                 }
-
-
+                let currentIndex = gallery.findIndex(imageSrc => imageSrc === url || imageSrc === urlVideo)
+                console.log(currentIndex)
+                console.log(testImage.test(gallery[currentIndex]))
                 // On ajoute un écouteur d'évènement sur l'élément close qui va fermer la lightbox au click
                 lightbox.querySelector(".lightbox_close").addEventListener("click", e => {
                     lightbox.style.display = "none"
@@ -78,6 +89,53 @@ function mediaTemplate(media, photographeName) {
                 window.addEventListener("keydown", (event) => {
                     if (event.key === "Escape") {
                         lightbox.style.display = "none"
+                    }
+                })
+                // Navigation de la lightbox
+                lightbox.querySelector(".lightbox_next").addEventListener("click", e => {
+
+                    picture.src = gallery[currentIndex + 1]
+                    currentIndex += 1
+
+                    if (testImage.test(gallery[currentIndex])) {
+                        video.src = ""
+                        video.style.display = "none"
+                        picture.style.display = "flex"
+                        picture.src = gallery[currentIndex]
+                    }
+                    else if (testImage.test(gallery[currentIndex]) === false) {
+                        picture.style.display = "none"
+                        video.style.display = "flex"
+                        video.src = gallery[currentIndex]
+
+                    }
+                    if (currentIndex === gallery.length) {
+                        currentIndex = 0
+                        video.src = ""
+                        video.style.display = "none"
+                        picture.style.display = "flex"
+                        picture.src = gallery[currentIndex]
+                    }
+                })
+                lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
+
+                    picture.src = gallery[currentIndex - 1]
+                    currentIndex -= 1
+
+                    if (testImage.test(gallery[currentIndex]) === false) {
+                        video.src = gallery[currentIndex]
+                        video.style.display = "flex"
+                    }
+                    else {
+                        video.src = ""
+                        video.style.display = "none"
+                    }
+                    if (currentIndex < 0) {
+                        currentIndex = gallery.length - 1
+                        video.src = ""
+                        video.style.display = "none"
+                        picture.style.display = "flex"
+                        picture.src = gallery[currentIndex]
                     }
                 })
                 return lightbox

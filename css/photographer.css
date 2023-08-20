@@ -32,7 +32,8 @@
     color: #D3573C;
 }
 
-.photograph-header p:first-of-type {
+.photograph-header p:first-of-type,
+.photograph-header .price {
     color: #901C1C;
 }
 
@@ -40,6 +41,27 @@
     color: #525252;
 }
 
+/* Système de tri */
+.sort {
+    margin: 30px 100px;
+}
+
+
+.sort label {
+    font-weight: 700;
+    size: 18px;
+}
+
+.sort select,
+.sort option {
+    font-weight: 700;
+    size: 18px;
+    color: #FFFFFF;
+    background-color: #901C1C;
+    padding: 10px 10px;
+}
+
+/* Système de tri */
 .container_media {
     width: 30%;
 }
@@ -79,9 +101,13 @@
 
 .details_media p {
     align-items: flex-end;
+    cursor: pointer;
 }
 
 .likesAndPrice {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     position: fixed;
     bottom: 0px;
     right: 25px;
@@ -227,6 +253,10 @@ form div:last-of-type textarea {
 .lightbox_container video {
     max-width: 100%;
     height: auto;
+}
+
+.lightbox_container video {
+    display: none;
 }
 
 

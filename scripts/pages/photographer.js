@@ -59,8 +59,12 @@ async function createPhotographerDisplay(artist, media) {
     // On sélectionne l'élément où intégrer les données
     const photographeHeader = document.querySelector(".photograph-header")
     const button = document.querySelector(".contact_button")
-    const likesAndPrice = document.createElement("p")
+    const likesAndPrice = document.createElement("div")
     likesAndPrice.setAttribute("class", "likesAndPrice")
+    const likes = document.createElement("p")
+    const price = document.createElement("span")
+    likes.setAttribute("class", "likes")
+    price.setAttribute("class", "price")
 
     // On place les éléments du dom
     button.before(divDetails)
@@ -69,6 +73,8 @@ async function createPhotographerDisplay(artist, media) {
     divDetails.appendChild(paragraphTagline)
     photographeHeader.appendChild(img)
     divDetails.appendChild(likesAndPrice)
+    likesAndPrice.appendChild(likes)
+    likesAndPrice.appendChild(price)
 
     // Et on y insère les données 
     name.textContent = artist.name
@@ -82,16 +88,18 @@ async function createPhotographerDisplay(artist, media) {
     let total = sum.reduce((acc, curr) =>
         acc + curr
         , initialValue)
-    likesAndPrice.textContent = `${total}♥ ${artist.price}€/Jour`
+    likes.textContent = `${total} ♥ `
+    price.textContent = `${artist.price}€/Jour`
 
+    // On sélectionne les likes
 
 }
-async function createMediaDisplay(medias, photographName) {
+async function createMediaDisplay(medias, photographName, gallery) {
     const main = document.querySelector("#main")
     const mainContainerMedia = document.createElement("div")
     mainContainerMedia.setAttribute("class", "main_container_media")
     medias.forEach(media => {
-        const mediaModel = mediaTemplate(media, photographName)
+        const mediaModel = mediaTemplate(media, photographName, gallery)
 
         const mediaDisplayDom = mediaModel.getUserMediaDOM()
         main.appendChild(mainContainerMedia)
@@ -99,105 +107,111 @@ async function createMediaDisplay(medias, photographName) {
     });
 
 }
-async function displayPhotographe() {
+async function displayPhotographe(gallery) {
     const { photographe } = await getPhotographer()
     const mediaPhotographe = await getMediaPhotographe()
     createPhotographerDisplay(photographe, mediaPhotographe)
     // const gallery = mediaPhotographe.map(e => { return e.image })
     // console.log(gallery)
-    createMediaDisplay(mediaPhotographe, photographe.name)
-
-    //On récupére les photos de l'objet mediaPhotographe
-    console.log(mediaPhotographe)
-    //SI ça finis par jpg retourn l'url de l'image sinon retourne l'url de la video
-    const testIfImage = /(?:jpg)$|(?:png)$/g
-    let gallery = mediaPhotographe.map(src => {
+    gallery = mediaPhotographe.map(src => {
         if (src.image) { return `assets/photographers/${photographe.name}/${src.image}` }
         else { return `assets/photographers/${photographe.name}/${src.video}` }
     })
-    // console.log(gallery)
+    createMediaDisplay(mediaPhotographe, photographe.name, gallery)
 
-    function goToNext() {
-        // récupère la src de l'image en cours
-        let image = document.querySelector(".lightbox img")
-        let src = image.getAttribute("src")
-        let video = document.querySelector(".lightbox video")
+    //On récupére les photos de l'objet mediaPhotographe
+    console.log(mediaPhotographe)
 
-        console.log(src)
-        //Si la src finis par mp4 on créé un élément video
-        const testVideo = /(?:mp4)$/g
-        // récupère l'index de la photo en cours
-        let i = gallery.findIndex(image => image === src)
-        // Si on arrive à la fin du tableau on l'index reviens au début 
-        if (i >= gallery.length - 1) {
-            i = -1
-            image.setAttribute("src", gallery[i])
-            // 
-        }
-        image.setAttribute("src", gallery[i + 1])
-        video.setAttribute("src", gallery[i + 1])
-        let srcVideo = video.getAttribute("src")
-        if (testVideo.test(srcVideo) === false) {
-            image.style.display = "flex"
-            video.style.display = "none"
+    //SI ça finis par jpg retourn l'url de l'image sinon retourne l'url de la video
+    const testIfImage = /(?:jpg)$|(?:png)$/g
 
-        }
-        else {
-            video.style.display = "block"
-        }
-    }
-    function goToPrev() {
-        // récupère la src de l'image en cours
-        let image = document.querySelector(".lightbox img")
-        let src = image.getAttribute("src")
-        let video = document.querySelector(".lightbox video")
+    console.log(gallery)
 
-        const testVideo = /(?:mp4)$/g
-        console.log(src)
-        // récupère l'index de la photo en cours
-        let i = gallery.findIndex(image => image === src)
-        // si on arrive au début du tableau, on reviens à la fin
-        if (i === 0) {
-            i = gallery.length
-        }
-        video.setAttribute("src", gallery[i - 1])
-        image.setAttribute("src", gallery[i - 1])
-        let srcVideo = video.getAttribute("src")
-        if (testVideo.test(srcVideo) === false) {
-            video.style.display = "none"
-        }
-        else {
-            video.style.display = "block"
-        }
+    // console.log(likesParagraph) 
 
-    }
+    // On sélectionne les likes totaux
+    let sumLikes = document.querySelector(".likes")
+    let sumLikesText = sumLikes.innerHTML
+    toString(sumLikesText)
+    const afterLikes = sumLikesText.split(" ")
+    let sumLikesInt = afterLikes[0]
+    sumLikesInt = parseInt(sumLikesInt)
+    // On sélectionne les likes des médias
+    let likesParagraph = document.querySelectorAll(".details_media p")
+    likesParagraph.forEach((e) => {
+        let classes = e.classList
+        let numberLikesMedia = e.innerHTML
+        toString(numberLikesMedia)
+        const afterLikes = numberLikesMedia.split(" ")
+        // On sélectionne uniquement le nombre de likes qu'on transforme en entier.
+        let numberLikesMediaNoHeart = afterLikes[0]
+        numberLikesMediaNoHeart = parseInt(numberLikesMediaNoHeart)
 
-    let next = document.querySelector(".lightbox .lightbox_next")
-    next.addEventListener("click", e => {
-        goToNext()
 
-    })
+        e.addEventListener("click", element => {
+            element.preventDefault()
+            console.log(numberLikesMediaNoHeart)
+            let result = classes.toggle("c");
 
-    window.addEventListener("keydown", (event) => {
-        let lightboxOpen = document.querySelector(".lightbox")
-        if (lightboxOpen.style.display === "block") {
-            switch (event.key) {
-                case "ArrowRight":
-                    goToNext()
-                    break;
 
-                case "ArrowLeft":
-                    goToPrev()
-                    break;
+            if (result) {
+                e.innerHTML = ""
+                e.innerHTML = `${numberLikesMediaNoHeart + 1} ♥`
+                sumLikes.innerHTML = ""
+                sumLikesInt += 1
+                sumLikes.innerHTML = `${sumLikesInt} ♥`
             }
+            else {
+                e.innerHTML = ""
+                e.innerHTML = `${numberLikesMediaNoHeart} ♥`
+                sumLikes.innerHTML = ""
+                sumLikesInt -= 1
+                sumLikes.innerHTML = `${sumLikesInt} ♥`
+            }
+        })
+    })
+
+    function comparePopularity(a, b) {
+        return a - b
+
+    }
+    function compareDate() {
+
+    }
+    function compareTitre() {
+
+    }
+    // test système de tri
+    document.querySelector("#sort_type").addEventListener("change", (event) => {
+        switch (event.target.value) {
+            case "popularité":
+                console.log(event.target.value)
+                mediaPhotographe.sort(function (a, b) {
+                    return a.likes - b.likes
+                })
+                console.log(mediaPhotographe)
+                break;
+            case "date":
+                console.log(event.target.value)
+                mediaPhotographe.sort(function (a, b) {
+                    return new Date(a.date) - new Date(b.date)
+                })
+                console.log(mediaPhotographe)
+                break;
+            case "titre":
+                console.log(event.target.value)
+                mediaPhotographe.sort(function (a, b) {
+                    a = a.title
+                    b = b.title
+                    return a.localeCompare(b);
+                })
+                console.log(mediaPhotographe)
+                break;
         }
     })
-    let prev = document.querySelector(".lightbox .lightbox_prev")
-    prev.addEventListener("click", e => {
 
-        goToPrev()
-    })
 
+    // test système de tri
 }
 displayPhotographe()
 
