@@ -44,10 +44,70 @@
 /* Système de tri */
 .sort {
     margin: 30px 100px;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+
 }
 
+.sort #combo1-label {
+    margin-right: 30px;
+}
 
-.sort label {
+.sort #sort_type {
+    display: none;
+}
+
+.select_selected {
+    background-color: #901C1C;
+}
+
+.select_selected::after {
+    /* position: absolute; */
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+}
+
+.select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+    /* color: #ffffff; */
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+    position: absolute;
+    background-color: DodgerBlue;
+    top: 455px;
+    left: 164px;
+    z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+    display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* .sort label {
     font-weight: 700;
     size: 18px;
 }
@@ -59,6 +119,114 @@
     color: #FFFFFF;
     background-color: #901C1C;
     padding: 10px 10px;
+} */
+
+.combo *,
+.combo *::before,
+.combo *::after {
+    box-sizing: border-box;
+
+}
+
+
+.combo {
+    display: block;
+    margin-bottom: 1.5em;
+    max-width: 400px;
+    position: relative;
+}
+
+
+.combo svg {
+    background-image: url("../assets/icons/sortArrow.svg");
+    background-repeat: no-repeat;
+    position: relative;
+    top: -30px;
+    left: 130px;
+    width: 160px;
+    height: 16px;
+}
+
+.open svg {
+    transform: translate(-140px, -5px) rotate(180deg);
+}
+
+.combo-input {
+    background-color: #901C1C;
+    color: #FFFFFF;
+    border: 2px solid rgb(0 0 0 / 75%);
+    border-radius: 4px;
+    display: block;
+    font-size: 1em;
+    min-height: calc(1.4em + 26px);
+    padding: 12px 50px 14px 14px;
+    text-align: left;
+    width: 100%;
+}
+
+.open .combo-input {
+    border-radius: 4px 4px 0 0;
+}
+
+.combo-input:focus {
+    border-color: #0067b8;
+    box-shadow: 0 0 4px 2px #0067b8;
+    outline: 4px solid transparent;
+}
+
+.combo-label {
+    display: block;
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 0.25em;
+}
+
+.combo-menu {
+    background-color: #901C1C;
+    border: 1px solid rgb(0 0 0 / 75%);
+    border-radius: 0 0 4px 4px;
+    display: none;
+    max-height: 300px;
+    left: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 100;
+}
+
+.open .combo-menu {
+    display: block;
+}
+
+.combo-option {
+    color: #fff;
+    padding: 10px 12px 12px;
+}
+
+.combo-option:hover {
+    background-color: rgb(0 0 0 / 10%);
+}
+
+.combo-option.option-current {
+    outline: 3px solid #0067b8;
+    outline-offset: -3px;
+}
+
+.combo-option[aria-selected="true"] {
+    padding-right: 30px;
+    position: relative;
+}
+
+.combo-option[aria-selected="true"]::after {
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+    content: "";
+    height: 16px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translate(0, -50%) rotate(45deg);
+    width: 8px;
 }
 
 /* Système de tri */
@@ -207,10 +375,8 @@ form div:last-of-type textarea {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .90);
+    background-color: #FFFFFF;
     z-index: 2;
-    overflow: auto;
-    animation: lightboxIn .5;
 }
 
 .lightbox_next,
@@ -251,27 +417,31 @@ form div:last-of-type textarea {
 
 .lightbox_container img,
 .lightbox_container video {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .lightbox_container video {
     display: none;
 }
 
-
-/* .lightbox_container video {
-    display: none;
-} */
-
 .lightbox_container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-left: 70px;
     margin-right: 70px;
-    min-height: 100%;
+    height: 90%;
 
+}
+
+.lightbox_container .title_lightbox {
+    color: #901C1C;
+    font-size: 24px;
+    font-weight: 400;
+    align-self: flex-start;
 }
 
 /* Lightbox */

@@ -20,6 +20,18 @@
       <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
     </div>
     <div class="sort">
+
+      <label id="combo1-label" class="combo-label">Trier par</label>
+      <div class="combo js-select">
+        <div aria-controls="listbox1" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="combo1-label"
+          id="combo1" class="combo-input" role="combobox" tabindex="0"></div><svg></svg>
+        <div class="combo-menu" role="listbox" id="listbox1" aria-labelledby="combo1-label" tabindex="-1">
+
+
+        </div>
+      </div>
+    </div>
+    <!-- <div class="sort">
       <label for="sort_type">Trier par</label>
       <select name="sorts" id="sort_type">
         <option value="">--Veuillez sélectionner une option--</option>
@@ -27,7 +39,7 @@
         <option value="date">Date</option>
         <option value="titre">Titre</option>
       </select>
-    </div>
+    </div> -->
   </main>
   <div class="background">
     <div id="contact_modal">
@@ -67,6 +79,7 @@
     <div class="lightbox_container">
       <img>
       <video controls></video>
+      <p class="title_lightbox"></p>
     </div>
   </div>
 

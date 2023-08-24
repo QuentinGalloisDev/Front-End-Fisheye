@@ -62,6 +62,7 @@ function mediaTemplate(media, photographeName, gallery) {
                 lightbox.style.display = "block"
                 const picture = document.querySelector(".lightbox .lightbox_container img")
                 const video = document.querySelector(".lightbox .lightbox_container video")
+                const titleLightbox = document.querySelector(".title_lightbox")
 
 
 
@@ -72,16 +73,19 @@ function mediaTemplate(media, photographeName, gallery) {
                     picture.style.display = "block"
                     picture.src = url
                     picture.id = id
+                    titleLightbox.innerHTML = title
                 }
                 else {
+                    picture.src = ""
                     picture.style.display = "none"
                     video.style.display = "block"
                     video.src = urlVideo
                     video.id = id
+
                 }
-                let currentIndex = gallery.findIndex(imageSrc => imageSrc === url || imageSrc === urlVideo)
+                let currentIndex = gallery.findIndex(imageSrc => imageSrc.url === url || imageSrc.url === urlVideo)
                 console.log(currentIndex)
-                console.log(testImage.test(gallery[currentIndex]))
+                console.log(testImage.test(picture.src))
                 // On ajoute un écouteur d'évènement sur l'élément close qui va fermer la lightbox au click
                 lightbox.querySelector(".lightbox_close").addEventListener("click", e => {
                     lightbox.style.display = "none"
@@ -94,19 +98,23 @@ function mediaTemplate(media, photographeName, gallery) {
                 // Navigation de la lightbox
                 lightbox.querySelector(".lightbox_next").addEventListener("click", e => {
 
-                    picture.src = gallery[currentIndex + 1]
+                    picture.src = gallery[currentIndex + 1].url
+                    titleLightbox.innerHTML = ""
+                    titleLightbox.innerHTML = gallery[currentIndex + 1].title
                     currentIndex += 1
 
-                    if (testImage.test(gallery[currentIndex])) {
+
+
+                    if (testImage.test(gallery[currentIndex].url)) {
                         video.src = ""
                         video.style.display = "none"
                         picture.style.display = "flex"
-                        picture.src = gallery[currentIndex]
+                        picture.src = gallery[currentIndex].url
                     }
-                    else if (testImage.test(gallery[currentIndex]) === false) {
+                    else if (testImage.test(gallery[currentIndex].url) === false) {
                         picture.style.display = "none"
                         video.style.display = "flex"
-                        video.src = gallery[currentIndex]
+                        video.src = gallery[currentIndex].url
 
                     }
                     if (currentIndex === gallery.length) {
@@ -114,28 +122,34 @@ function mediaTemplate(media, photographeName, gallery) {
                         video.src = ""
                         video.style.display = "none"
                         picture.style.display = "flex"
-                        picture.src = gallery[currentIndex]
+                        picture.src = gallery[currentIndex].url
                     }
                 })
                 lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
 
-                    picture.src = gallery[currentIndex - 1]
+                    picture.src = gallery[currentIndex - 1].url
+                    titleLightbox.innerHTML = ""
+                    titleLightbox.innerHTML = gallery[currentIndex - 1].title
                     currentIndex -= 1
 
-                    if (testImage.test(gallery[currentIndex]) === false) {
-                        video.src = gallery[currentIndex]
-                        video.style.display = "flex"
-                    }
-                    else {
+                    if (testImage.test(gallery[currentIndex].url)) {
                         video.src = ""
                         video.style.display = "none"
+                        picture.style.display = "flex"
+                        picture.src = gallery[currentIndex].url
+                    }
+                    else if (testImage.test(gallery[currentIndex].url) === false) {
+                        picture.style.display = "none"
+                        video.style.display = "flex"
+                        video.src = gallery[currentIndex].url
+
                     }
                     if (currentIndex < 0) {
                         currentIndex = gallery.length - 1
                         video.src = ""
                         video.style.display = "none"
                         picture.style.display = "flex"
-                        picture.src = gallery[currentIndex]
+                        picture.src = gallery[currentIndex].url
                     }
                 })
                 return lightbox
