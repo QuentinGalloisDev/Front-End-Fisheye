@@ -91,19 +91,33 @@ function mediaTemplate(media, photographeName, gallery) {
                     lightbox.style.display = "none"
                 })
                 window.addEventListener("keydown", (event) => {
+                    switch (event.key) {
+                        case "Escape":
+                            lightbox.style.display = "none"
+                            break;
+
+                        case "ArrowRight":
+                            goToNext()
+                            break;
+
+                        case "ArrowLeft":
+                            goToPrev()
+                            break;
+                    }
                     if (event.key === "Escape") {
-                        lightbox.style.display = "none"
+
                     }
                 })
                 // Navigation de la lightbox
                 lightbox.querySelector(".lightbox_next").addEventListener("click", e => {
+                    goToNext()
 
+                })
+                function goToNext() {
                     picture.src = gallery[currentIndex + 1].url
                     titleLightbox.innerHTML = ""
                     titleLightbox.innerHTML = gallery[currentIndex + 1].title
                     currentIndex += 1
-
-
 
                     if (testImage.test(gallery[currentIndex].url)) {
                         video.src = ""
@@ -115,7 +129,6 @@ function mediaTemplate(media, photographeName, gallery) {
                         picture.style.display = "none"
                         video.style.display = "flex"
                         video.src = gallery[currentIndex].url
-
                     }
                     if (currentIndex === gallery.length) {
                         currentIndex = 0
@@ -124,9 +137,8 @@ function mediaTemplate(media, photographeName, gallery) {
                         picture.style.display = "flex"
                         picture.src = gallery[currentIndex].url
                     }
-                })
-                lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
-
+                }
+                function goToPrev() {
                     picture.src = gallery[currentIndex - 1].url
                     titleLightbox.innerHTML = ""
                     titleLightbox.innerHTML = gallery[currentIndex - 1].title
@@ -151,7 +163,35 @@ function mediaTemplate(media, photographeName, gallery) {
                         picture.style.display = "flex"
                         picture.src = gallery[currentIndex].url
                     }
+                }
+                lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
+                    goToPrev()
+                    // picture.src = gallery[currentIndex - 1].url
+                    // titleLightbox.innerHTML = ""
+                    // titleLightbox.innerHTML = gallery[currentIndex - 1].title
+                    // currentIndex -= 1
+
+                    // if (testImage.test(gallery[currentIndex].url)) {
+                    //     video.src = ""
+                    //     video.style.display = "none"
+                    //     picture.style.display = "flex"
+                    //     picture.src = gallery[currentIndex].url
+                    // }
+                    // else if (testImage.test(gallery[currentIndex].url) === false) {
+                    //     picture.style.display = "none"
+                    //     video.style.display = "flex"
+                    //     video.src = gallery[currentIndex].url
+
+                    // }
+                    // if (currentIndex < 0) {
+                    //     currentIndex = gallery.length - 1
+                    //     video.src = ""
+                    //     video.style.display = "none"
+                    //     picture.style.display = "flex"
+                    //     picture.src = gallery[currentIndex].url
+                    // }
                 })
+
                 return lightbox
 
             }

@@ -189,7 +189,7 @@
     max-height: 300px;
     left: 0;
     position: absolute;
-    top: 100%;
+    top: 45px;
     width: 100%;
     z-index: 100;
 }
