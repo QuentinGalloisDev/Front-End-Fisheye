@@ -7,7 +7,7 @@
 async function getPromesse() {
     // let params = (new URL(document.location)).searchParams
     // let id = params.get('id')
-    let response = await fetch("../../data/photographers.json")
+    let response = await fetch("././data/photographers.json")
     let photographers = await response.json()
     photographers = photographers.photographers
 
@@ -18,7 +18,7 @@ async function getPromesse() {
     // })
 }
 async function getMedia() {
-    let responseMedia = await fetch("../../data/photographers.json")
+    let responseMedia = await fetch("././data/photographers.json")
     let medias = await responseMedia.json()
     medias = medias.media
     // console.log(medias)
