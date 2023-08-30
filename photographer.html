@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
   <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -13,7 +13,7 @@
 
   <header>
     <a href="index.html" aria-label="Le logo Fisheye. Lien vers la page d'accueil du site"> <img
-        src="assets/images/logo.png" class="logo" alt="Le logo Fisheye" /></a>
+        src="assets/images/logo.png" class="logo" alt="Le logo Fisheye" tabindex="1" /></a>
   </header>
   <main id="main">
     <div class="photograph-header">
@@ -24,7 +24,8 @@
       <label id="combo1-label" class="combo-label">Trier par</label>
       <div class="combo js-select">
         <div aria-controls="listbox1" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="combo1-label"
-          id="combo1" class="combo-input" role="combobox" tabindex="0"></div><svg></svg>
+          id="combo1" class="combo-input" role="combobox" tabindex="9"></div><svg></svg>
+        <!-- Le tabindex -1 ne permet pas à l'élément d'être atteint au clavier. -->
         <div class="combo-menu" role="listbox" id="listbox1" aria-labelledby="combo1-label" tabindex="-1">
 
 
@@ -46,7 +47,7 @@
       <div class="modal">
         <header>
           <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
+          <img src="assets/icons/close.svg" alt="Icône Fermer" onclick="closeModal()" />
         </header>
         <form>
           <div>
@@ -54,11 +55,11 @@
             <input type="text" id="firstName" />
           </div>
           <div>
-            <label for="Name">Nom</label>
+            <label for="name">Nom</label>
             <input type="text" id="name" />
           </div>
           <div>
-            <label for="mail">Email</label>
+            <label for="email">Email</label>
             <input type="email" id="email" />
           </div>
           <div>

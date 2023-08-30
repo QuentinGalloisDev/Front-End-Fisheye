@@ -88,7 +88,7 @@ async function createPhotographerDisplay(artist, media) {
     likesAndPrice.appendChild(likes)
     likesAndPrice.appendChild(price)
 
-    // Et on y insère les données 
+    // Et on y insère les données
     name.textContent = artist.name
     paragraphLocation.textContent = `${artist.city}, ${artist.country}`
     paragraphTagline.textContent = artist.tagline
@@ -103,16 +103,24 @@ async function createPhotographerDisplay(artist, media) {
     likes.textContent = `${total} ♥ `
     price.textContent = `${artist.price}€/Jour`
 
-    // On sélectionne les likes
+    // On met les tabIndex
+    name.setAttribute("tabindex", "2")
+    paragraphLocation.setAttribute("tabindex", "3")
+    paragraphTagline.setAttribute("tabindex", "4")
+    button.setAttribute("tabindex", "5")
+    img.setAttribute("tabindex", "6")
+    likes.setAttribute("tabindex", "7")
+    price.setAttribute("tabindex", "8")
 
 }
-async function createMediaDisplay(medias, photographName, gallery) {
+async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
     const main = document.querySelector("#main")
     const mainContainerMedia = document.createElement("div")
     mainContainerMedia.setAttribute("class", "main_container_media")
+    tabIndex = 10
     medias.forEach(media => {
-        const mediaModel = mediaTemplate(media, photographName, gallery)
-
+        const mediaModel = mediaTemplate(media, photographName, gallery, tabIndex)
+        tabIndex += 1
         const mediaDisplayDom = mediaModel.getUserMediaDOM()
         main.appendChild(mainContainerMedia)
         mainContainerMedia.appendChild(mediaDisplayDom)
@@ -160,7 +168,7 @@ async function createMediaDisplay(medias, photographName, gallery) {
     })
 
 }
-async function displayPhotographe(gallery) {
+async function displayPhotographe(gallery, tabIndex) {
     const { photographe } = await getPhotographer()
     const mediaPhotographe = await getMediaPhotographe()
     gallery = await getGallery(photographe)
@@ -175,7 +183,7 @@ async function displayPhotographe(gallery) {
 
     // })
 
-    createMediaDisplay(mediaPhotographe, photographe.name, gallery)
+    createMediaDisplay(mediaPhotographe, photographe.name, gallery, tabIndex)
 
     //On récupére les photos de l'objet mediaPhotographe
     console.log(mediaPhotographe)
@@ -185,7 +193,7 @@ async function displayPhotographe(gallery) {
 
     console.log(gallery)
 
-    // console.log(likesParagraph) 
+    // console.log(likesParagraph)
 
     // Création custom select.
 
@@ -291,7 +299,7 @@ async function displayPhotographe(gallery) {
     // }
 
 
-    // test patterns tri 
+    // test patterns tri
 
     const SelectActions = {
         Close: 0,
@@ -326,7 +334,6 @@ async function displayPhotographe(gallery) {
         const openKeys = ['ArrowDown', 'ArrowUp', 'Enter', ' ']; // all keys that will do the default open action
         // handle opening when closed
         if (!menuOpen && openKeys.includes(key)) {
-
             return SelectActions.Open;
         }
 
@@ -506,43 +513,8 @@ async function displayPhotographe(gallery) {
             event.stopPropagation();
             this.onOptionClick(index);
             let arrow = document.querySelector(".combo::after")
-            console.log(arrow)
 
-            console.log(optionEl.innerHTML)
-            switch (optionEl.innerHTML) {
-                case "Popularité":
-                    mediaPhotographe.sort(function (a, b) {
-                        return b.likes - a.likes
-                    })
-                    mainContainerMedia = document.querySelector(".main_container_media")
-                    console.log(mediaPhotographe)
-                    mainContainerMedia.remove()
-                    createMediaDisplay(mediaPhotographe, photographe.name, gallery)
-
-                    break;
-                case "Date":
-                    mediaPhotographe.sort(function (a, b) {
-                        return new Date(a.date) - new Date(b.date)
-                    })
-
-                    mainContainerMedia = document.querySelector(".main_container_media")
-                    console.log(mediaPhotographe)
-                    mainContainerMedia.remove()
-                    createMediaDisplay(mediaPhotographe, photographe.name, gallery)
-
-                    break;
-                case "Titre":
-                    mediaPhotographe.sort(function (a, b) {
-                        a = a.title
-                        b = b.title
-                        return a.localeCompare(b);
-                    })
-                    mainContainerMedia = document.querySelector(".main_container_media")
-                    console.log(mediaPhotographe)
-                    mainContainerMedia.remove()
-                    createMediaDisplay(mediaPhotographe, photographe.name, gallery)
-                    break;
-            }
+            console.log(optionText)
         });
         optionEl.addEventListener('mousedown', this.onOptionMouseDown.bind(this));
 
@@ -644,6 +616,7 @@ async function displayPhotographe(gallery) {
         // update state
         this.activeIndex = index;
 
+
         // update aria-activedescendant
         this.comboEl.setAttribute('aria-activedescendant', `${this.idBase}-${index}`);
 
@@ -685,6 +658,62 @@ async function displayPhotographe(gallery) {
         // update displayed value
         const selected = this.options[index];
         this.comboEl.innerHTML = selected;
+        switch (selected) {
+            case "Popularité":
+                mediaPhotographe.sort(function (a, b) {
+                    return b.likes - a.likes
+                })
+                mainContainerMedia = document.querySelector(".main_container_media")
+                console.log(mediaPhotographe)
+                mainContainerMedia.remove()
+                gallery = mediaPhotographe.map(src => {
+                    {
+                        if (src.image) { return { url: `assets/photographers/${photographe.name}/${src.image}`, title: src.title } }
+                        else { return { url: `assets/photographers/${photographe.name}/${src.video}`, title: src.title } }
+                    }
+                })
+                createMediaDisplay(mediaPhotographe, photographe.name, gallery)
+
+                console.log(gallery)
+                break;
+            case "Date":
+                mediaPhotographe.sort(function (a, b) {
+                    return new Date(a.date) - new Date(b.date)
+                })
+
+                mainContainerMedia = document.querySelector(".main_container_media")
+                console.log(mediaPhotographe)
+                mainContainerMedia.remove()
+                gallery = mediaPhotographe.map(src => {
+                    {
+                        if (src.image) { return { url: `assets/photographers/${photographe.name}/${src.image}`, title: src.title } }
+                        else { return { url: `assets/photographers/${photographe.name}/${src.video}`, title: src.title } }
+                    }
+                })
+                createMediaDisplay(mediaPhotographe, photographe.name, gallery)
+
+                console.log(gallery)
+                break;
+            case "Titre":
+                mediaPhotographe.sort(function (a, b) {
+                    a = a.title
+                    b = b.title
+                    return a.localeCompare(b);
+                })
+                mainContainerMedia = document.querySelector(".main_container_media")
+                console.log(mediaPhotographe)
+                mainContainerMedia.remove()
+                gallery = mediaPhotographe.map(src => {
+                    {
+                        if (src.image) { return { url: `assets/photographers/${photographe.name}/${src.image}`, title: src.title } }
+                        else { return { url: `assets/photographers/${photographe.name}/${src.video}`, title: src.title } }
+                    }
+                })
+                createMediaDisplay(mediaPhotographe, photographe.name, gallery)
+
+                console.log(gallery)
+                break;
+        }
 
         // update aria-selected
         const options = this.el.querySelectorAll('[role=option]');

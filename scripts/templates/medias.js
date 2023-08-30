@@ -1,4 +1,4 @@
-function mediaTemplate(media, photographeName, gallery) {
+function mediaTemplate(media, photographeName, gallery, tabIndex) {
     let { date, id, image, video, likes, photographerId, price, title } = media;
     const photoMedia = `assets/photographers/${photographeName}/${image}`
     const videoMedia = `assets/photographers/${photographeName}/${video}`
@@ -16,12 +16,14 @@ function mediaTemplate(media, photographeName, gallery) {
         const likesNumber = document.createElement("p")
         const photo = document.createElement("img")
         main.appendChild(container)
+
         if (media.hasOwnProperty('image')) {
 
             container.appendChild(photo)
             photo.setAttribute("src", photoMedia)
             photo.setAttribute("id", id)
             photo.setAttribute("alt", `La photo de ${title}`)
+            photo.setAttribute("tabindex", `${tabIndex}`)
         }
         else {
             const lecteur = document.createElement("video")
@@ -30,6 +32,7 @@ function mediaTemplate(media, photographeName, gallery) {
             const source = document.createElement("source")
             lecteur.appendChild(source)
             source.setAttribute("src", videoMedia)
+            lecteur.setAttribute("tabindex", `${tabIndex}`)
         }
         container.appendChild(details)
         details.appendChild(titre)
@@ -37,8 +40,11 @@ function mediaTemplate(media, photographeName, gallery) {
 
         // On insère les données
         titre.textContent = title
+        titre.setAttribute("tabindex", `${tabIndex}`)
         likesNumber.setAttribute("class", "a b")
+        likesNumber.setAttribute("tabindex", `${tabIndex}`)
         likesNumber.textContent = `${likes} ♥`
+
         // On créer la lightbox
         // likesNumber.addEventListener("click", (e) => {
         //     likesNumber.textContent = `${likes++} ♥`
@@ -114,10 +120,20 @@ function mediaTemplate(media, photographeName, gallery) {
 
                 })
                 function goToNext() {
-                    picture.src = gallery[currentIndex + 1].url
-                    titleLightbox.innerHTML = ""
-                    titleLightbox.innerHTML = gallery[currentIndex + 1].title
-                    currentIndex += 1
+
+                    if (currentIndex == gallery.length - 1) {
+                        currentIndex = 0;
+                        titleLightbox.innerHTML = ""
+                        titleLightbox.innerHTML = gallery[currentIndex].title
+                        picture.src = gallery[currentIndex].url
+
+                    }
+                    else {
+                        picture.src = gallery[currentIndex + 1].url
+                        titleLightbox.innerHTML = ""
+                        titleLightbox.innerHTML = gallery[currentIndex + 1].title
+                        currentIndex += 1
+                    }
 
                     if (testImage.test(gallery[currentIndex].url)) {
                         video.src = ""
@@ -130,19 +146,21 @@ function mediaTemplate(media, photographeName, gallery) {
                         video.style.display = "flex"
                         video.src = gallery[currentIndex].url
                     }
-                    if (currentIndex === gallery.length) {
-                        currentIndex = 0
-                        video.src = ""
-                        video.style.display = "none"
-                        picture.style.display = "flex"
-                        picture.src = gallery[currentIndex].url
-                    }
                 }
                 function goToPrev() {
-                    picture.src = gallery[currentIndex - 1].url
-                    titleLightbox.innerHTML = ""
-                    titleLightbox.innerHTML = gallery[currentIndex - 1].title
-                    currentIndex -= 1
+                    if (currentIndex == 0) {
+                        currentIndex = gallery.length - 1
+                        titleLightbox.innerHTML = ""
+                        titleLightbox.innerHTML = gallery[currentIndex].title
+                        picture.src = gallery[currentIndex].url
+                    }
+                    else {
+                        picture.src = gallery[currentIndex - 1].url
+                        titleLightbox.innerHTML = ""
+                        titleLightbox.innerHTML = gallery[currentIndex - 1].title
+                        currentIndex -= 1
+                    }
+
 
                     if (testImage.test(gallery[currentIndex].url)) {
                         video.src = ""
