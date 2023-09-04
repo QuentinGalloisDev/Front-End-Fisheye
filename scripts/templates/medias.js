@@ -45,11 +45,6 @@ function mediaTemplate(media, photographeName, gallery, tabIndex) {
         likesNumber.setAttribute("tabindex", `${tabIndex}`)
         likesNumber.textContent = `${likes} ♥`
 
-        // On créer la lightbox
-        // likesNumber.addEventListener("click", (e) => {
-        //     likesNumber.textContent = `${likes++} ♥`
-        // })
-
         container.querySelector("img, video").addEventListener("click", (e) => {
 
             e.preventDefault()
@@ -61,7 +56,7 @@ function mediaTemplate(media, photographeName, gallery, tabIndex) {
 
                 document.body.appendChild(element)
             }
-            // On créer la structure de la lightbox avec l'url en variable.
+            // On créer la structure de la lightbox avec les url et le tableau des médias en paramètres .
             function insertDomLightbox(url, urlVideo, gallery) {
                 const testImage = /(?:jpg)$|(?:png)$/g
                 const lightbox = document.querySelector(".lightbox")
@@ -184,41 +179,11 @@ function mediaTemplate(media, photographeName, gallery, tabIndex) {
                 }
                 lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
                     goToPrev()
-                    // picture.src = gallery[currentIndex - 1].url
-                    // titleLightbox.innerHTML = ""
-                    // titleLightbox.innerHTML = gallery[currentIndex - 1].title
-                    // currentIndex -= 1
-
-                    // if (testImage.test(gallery[currentIndex].url)) {
-                    //     video.src = ""
-                    //     video.style.display = "none"
-                    //     picture.style.display = "flex"
-                    //     picture.src = gallery[currentIndex].url
-                    // }
-                    // else if (testImage.test(gallery[currentIndex].url) === false) {
-                    //     picture.style.display = "none"
-                    //     video.style.display = "flex"
-                    //     video.src = gallery[currentIndex].url
-
-                    // }
-                    // if (currentIndex < 0) {
-                    //     currentIndex = gallery.length - 1
-                    //     video.src = ""
-                    //     video.style.display = "none"
-                    //     picture.style.display = "flex"
-                    //     picture.src = gallery[currentIndex].url
-                    // }
                 })
-
                 return lightbox
-
             }
         }
-
         )
-
-
-
         return container
     }
     return { getUserMediaDOM }
