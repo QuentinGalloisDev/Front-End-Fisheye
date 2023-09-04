@@ -166,6 +166,31 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
                 sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
             }
         })
+
+
+        e.addEventListener("keydown", (element) => {
+            if (element.key == "Enter") {
+                let result = classes.toggle("c");
+                if (result) {
+                    e.innerHTML = ""
+                    e.innerHTML = `${numberLikesMediaNoHeart + 1} ${heartSvg}`
+                    sumLikes.innerHTML = ""
+                    sumLikesInt += 1
+                    sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
+                }
+                else {
+                    e.innerHTML = ""
+                    e.innerHTML = `${numberLikesMediaNoHeart} ${heartSvg}`
+                    sumLikes.innerHTML = ""
+                    sumLikesInt -= 1
+                    sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
+                }
+            }
+        })
+
+
+
+
     })
 
 }
