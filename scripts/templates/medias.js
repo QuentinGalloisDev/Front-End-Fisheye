@@ -82,6 +82,7 @@ function mediaTemplate(media, photographeName, gallery, tabIndex) {
                     video.style.display = "block"
                     video.src = urlVideo
                     video.id = id
+                    titleLightbox.innerHTML = title
 
                 }
                 let currentIndex = gallery.findIndex(imageSrc => imageSrc.url === url || imageSrc.url === urlVideo)
