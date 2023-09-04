@@ -43,7 +43,8 @@ function mediaTemplate(media, photographeName, gallery, tabIndex) {
         titre.setAttribute("tabindex", `${tabIndex}`)
         likesNumber.setAttribute("class", "a b")
         likesNumber.setAttribute("tabindex", `${tabIndex}`)
-        likesNumber.textContent = `${likes} ♥`
+        likesNumber.innerHTML = `${likes} <svg role="img" aria-label="likes" : focusable="false" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        </svg>`
 
         container.querySelector("img, video").addEventListener("click", (e) => {
 

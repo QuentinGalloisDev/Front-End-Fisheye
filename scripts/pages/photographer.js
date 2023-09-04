@@ -58,6 +58,8 @@ async function getGallery(photographe) {
     })
     return gallery
 }
+let heartSvg = `<svg role="img" aria-label="likes" : focusable="false" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        </svg>`
 
 async function createPhotographerDisplay(artist, media) {
 
@@ -100,7 +102,7 @@ async function createPhotographerDisplay(artist, media) {
     let total = sum.reduce((acc, curr) =>
         acc + curr
         , initialValue)
-    likes.textContent = `${total} ♥ `
+    likes.innerHTML = `${total} ${heartSvg} `
     price.textContent = `${artist.price}€/Jour`
 
     // On met les tabIndex
@@ -143,7 +145,6 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
         let numberLikesMediaNoHeart = afterLikes[0]
         numberLikesMediaNoHeart = parseInt(numberLikesMediaNoHeart)
 
-
         e.addEventListener("click", element => {
             element.preventDefault()
             console.log(numberLikesMediaNoHeart)
@@ -152,17 +153,17 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
 
             if (result) {
                 e.innerHTML = ""
-                e.innerHTML = `${numberLikesMediaNoHeart + 1} ♥`
+                e.innerHTML = `${numberLikesMediaNoHeart + 1} ${heartSvg}`
                 sumLikes.innerHTML = ""
                 sumLikesInt += 1
-                sumLikes.innerHTML = `${sumLikesInt} ♥`
+                sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
             }
             else {
                 e.innerHTML = ""
-                e.innerHTML = `${numberLikesMediaNoHeart} ♥`
+                e.innerHTML = `${numberLikesMediaNoHeart} ${heartSvg}`
                 sumLikes.innerHTML = ""
                 sumLikesInt -= 1
-                sumLikes.innerHTML = `${sumLikesInt} ♥`
+                sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
             }
         })
     })
