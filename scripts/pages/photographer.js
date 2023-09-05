@@ -1,7 +1,5 @@
 //Mettre le code JavaScript lié à la page photographer.html
 
-//Faire un searchparams pour récupérer l'id dans l'url.
-
 
 // Récupérer le tableau des photographes
 async function getPromesse() {

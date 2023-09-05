@@ -46,145 +46,150 @@ function mediaTemplate(media, photographeName, gallery, tabIndex) {
         likesNumber.innerHTML = `${likes} <svg role="img" aria-label="likes" : focusable="false" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
         </svg>`
 
+        function getUrlPhoto(url, urlVideo, gallery) {
+            const element = insertDomLightbox(url, urlVideo, gallery)
+
+            document.body.appendChild(element)
+        }
+        function insertDomLightbox(url, urlVideo, gallery) {
+            const testImage = /(?:jpg)$|(?:png)$/g
+            const lightbox = document.querySelector(".lightbox")
+            lightbox.style.display = "block"
+            const picture = document.querySelector(".lightbox .lightbox_container img")
+            const video = document.querySelector(".lightbox .lightbox_container video")
+            const titleLightbox = document.querySelector(".title_lightbox")
+
+
+
+            if (testImage.test(url)) {
+                // Si il y a une image (test avec cette regex : (?:jpg)$|(?:png)$) ) on créé une image
+                video.style.display = "none"
+                video.src = ""
+                picture.style.display = "block"
+                picture.src = url
+                picture.id = id
+                titleLightbox.innerHTML = title
+            }
+            else {
+                picture.src = ""
+                picture.style.display = "none"
+                video.style.display = "block"
+                video.src = urlVideo
+                video.id = id
+                titleLightbox.innerHTML = title
+
+            }
+            let currentIndex = gallery.findIndex(imageSrc => imageSrc.url === url || imageSrc.url === urlVideo)
+            console.log(currentIndex)
+            console.log(testImage.test(picture.src))
+            // On ajoute un écouteur d'évènement sur l'élément close qui va fermer la lightbox au click
+            lightbox.querySelector(".lightbox_close").addEventListener("click", e => {
+                lightbox.style.display = "none"
+            })
+            window.addEventListener("keydown", (event) => {
+                switch (event.key) {
+                    case "Escape":
+                        lightbox.style.display = "none"
+                        break;
+
+                    case "ArrowRight":
+                        goToNext()
+                        break;
+
+                    case "ArrowLeft":
+                        goToPrev()
+                        break;
+                }
+                if (event.key === "Escape") {
+
+                }
+            })
+            // Navigation de la lightbox
+            lightbox.querySelector(".lightbox_next").addEventListener("click", e => {
+                goToNext()
+
+            })
+            function goToNext() {
+
+                if (currentIndex == gallery.length - 1) {
+                    currentIndex = 0;
+                    titleLightbox.innerHTML = ""
+                    titleLightbox.innerHTML = gallery[currentIndex].title
+                    picture.src = gallery[currentIndex].url
+
+                }
+                else {
+                    picture.src = gallery[currentIndex + 1].url
+                    titleLightbox.innerHTML = ""
+                    titleLightbox.innerHTML = gallery[currentIndex + 1].title
+                    currentIndex += 1
+                }
+
+                if (testImage.test(gallery[currentIndex].url)) {
+                    video.src = ""
+                    video.style.display = "none"
+                    picture.style.display = "flex"
+                    picture.src = gallery[currentIndex].url
+                }
+                else if (testImage.test(gallery[currentIndex].url) === false) {
+                    picture.style.display = "none"
+                    video.style.display = "flex"
+                    video.src = gallery[currentIndex].url
+                }
+            }
+            function goToPrev() {
+                if (currentIndex == 0) {
+                    currentIndex = gallery.length - 1
+                    titleLightbox.innerHTML = ""
+                    titleLightbox.innerHTML = gallery[currentIndex].title
+                    picture.src = gallery[currentIndex].url
+                }
+                else {
+                    picture.src = gallery[currentIndex - 1].url
+                    titleLightbox.innerHTML = ""
+                    titleLightbox.innerHTML = gallery[currentIndex - 1].title
+                    currentIndex -= 1
+                }
+
+
+                if (testImage.test(gallery[currentIndex].url)) {
+                    video.src = ""
+                    video.style.display = "none"
+                    picture.style.display = "flex"
+                    picture.src = gallery[currentIndex].url
+                }
+                else if (testImage.test(gallery[currentIndex].url) === false) {
+                    picture.style.display = "none"
+                    video.style.display = "flex"
+                    video.src = gallery[currentIndex].url
+
+                }
+                if (currentIndex < 0) {
+                    currentIndex = gallery.length - 1
+                    video.src = ""
+                    video.style.display = "none"
+                    picture.style.display = "flex"
+                    picture.src = gallery[currentIndex].url
+                }
+            }
+            lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
+                goToPrev()
+            })
+            return lightbox
+        }
+        //Quand on appuie sur la touche enter sur une image ou une vidéo, on ouvre la lightbox.
+        container.querySelector("img, video").addEventListener("keydown", (touche) => {
+            if (touche.key === "Enter") {
+                getUrlPhoto(photoMedia, videoMedia, gallery)
+            }
+        })
+        //Quand on clique sur une image ou une vidéo on ouvre la lightbox.
         container.querySelector("img, video").addEventListener("click", (e) => {
 
             e.preventDefault()
             getUrlPhoto(photoMedia, videoMedia, gallery)
-            // createLightbox()
-
-            function getUrlPhoto(url, urlVideo, gallery) {
-                const element = insertDomLightbox(url, urlVideo, gallery)
-
-                document.body.appendChild(element)
-            }
-            // On créer la structure de la lightbox avec les url et le tableau des médias en paramètres .
-            function insertDomLightbox(url, urlVideo, gallery) {
-                const testImage = /(?:jpg)$|(?:png)$/g
-                const lightbox = document.querySelector(".lightbox")
-                lightbox.style.display = "block"
-                const picture = document.querySelector(".lightbox .lightbox_container img")
-                const video = document.querySelector(".lightbox .lightbox_container video")
-                const titleLightbox = document.querySelector(".title_lightbox")
-
-
-
-                if (testImage.test(url)) {
-                    // Si il y a une image (test avec cette regex : (?:jpg)$|(?:png)$) ) on créé une image
-                    video.style.display = "none"
-                    video.src = ""
-                    picture.style.display = "block"
-                    picture.src = url
-                    picture.id = id
-                    titleLightbox.innerHTML = title
-                }
-                else {
-                    picture.src = ""
-                    picture.style.display = "none"
-                    video.style.display = "block"
-                    video.src = urlVideo
-                    video.id = id
-                    titleLightbox.innerHTML = title
-
-                }
-                let currentIndex = gallery.findIndex(imageSrc => imageSrc.url === url || imageSrc.url === urlVideo)
-                console.log(currentIndex)
-                console.log(testImage.test(picture.src))
-                // On ajoute un écouteur d'évènement sur l'élément close qui va fermer la lightbox au click
-                lightbox.querySelector(".lightbox_close").addEventListener("click", e => {
-                    lightbox.style.display = "none"
-                })
-                window.addEventListener("keydown", (event) => {
-                    switch (event.key) {
-                        case "Escape":
-                            lightbox.style.display = "none"
-                            break;
-
-                        case "ArrowRight":
-                            goToNext()
-                            break;
-
-                        case "ArrowLeft":
-                            goToPrev()
-                            break;
-                    }
-                    if (event.key === "Escape") {
-
-                    }
-                })
-                // Navigation de la lightbox
-                lightbox.querySelector(".lightbox_next").addEventListener("click", e => {
-                    goToNext()
-
-                })
-                function goToNext() {
-
-                    if (currentIndex == gallery.length - 1) {
-                        currentIndex = 0;
-                        titleLightbox.innerHTML = ""
-                        titleLightbox.innerHTML = gallery[currentIndex].title
-                        picture.src = gallery[currentIndex].url
-
-                    }
-                    else {
-                        picture.src = gallery[currentIndex + 1].url
-                        titleLightbox.innerHTML = ""
-                        titleLightbox.innerHTML = gallery[currentIndex + 1].title
-                        currentIndex += 1
-                    }
-
-                    if (testImage.test(gallery[currentIndex].url)) {
-                        video.src = ""
-                        video.style.display = "none"
-                        picture.style.display = "flex"
-                        picture.src = gallery[currentIndex].url
-                    }
-                    else if (testImage.test(gallery[currentIndex].url) === false) {
-                        picture.style.display = "none"
-                        video.style.display = "flex"
-                        video.src = gallery[currentIndex].url
-                    }
-                }
-                function goToPrev() {
-                    if (currentIndex == 0) {
-                        currentIndex = gallery.length - 1
-                        titleLightbox.innerHTML = ""
-                        titleLightbox.innerHTML = gallery[currentIndex].title
-                        picture.src = gallery[currentIndex].url
-                    }
-                    else {
-                        picture.src = gallery[currentIndex - 1].url
-                        titleLightbox.innerHTML = ""
-                        titleLightbox.innerHTML = gallery[currentIndex - 1].title
-                        currentIndex -= 1
-                    }
-
-
-                    if (testImage.test(gallery[currentIndex].url)) {
-                        video.src = ""
-                        video.style.display = "none"
-                        picture.style.display = "flex"
-                        picture.src = gallery[currentIndex].url
-                    }
-                    else if (testImage.test(gallery[currentIndex].url) === false) {
-                        picture.style.display = "none"
-                        video.style.display = "flex"
-                        video.src = gallery[currentIndex].url
-
-                    }
-                    if (currentIndex < 0) {
-                        currentIndex = gallery.length - 1
-                        video.src = ""
-                        video.style.display = "none"
-                        picture.style.display = "flex"
-                        picture.src = gallery[currentIndex].url
-                    }
-                }
-                lightbox.querySelector(".lightbox_prev").addEventListener("click", e => {
-                    goToPrev()
-                })
-                return lightbox
-            }
         }
+
         )
         return container
     }
