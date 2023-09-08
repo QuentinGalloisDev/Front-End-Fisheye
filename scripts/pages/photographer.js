@@ -3,17 +3,11 @@
 
 // Récupérer le tableau des photographes
 async function getPromesse() {
-    // let params = (new URL(document.location)).searchParams
-    // let id = params.get('id')
+
     let response = await fetch("././data/photographers.json")
     let photographers = await response.json()
     photographers = photographers.photographers
-
-    // let photographe = photographers.find(element => element.id == id)
     return ({ photographers })
-    // return ({
-    //     photographers: [...photographers]
-    // })
 }
 async function getMedia() {
     let responseMedia = await fetch("././data/photographers.json")
@@ -113,6 +107,7 @@ async function createPhotographerDisplay(artist, media) {
     price.setAttribute("tabindex", "8")
 
 }
+
 async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
     const main = document.querySelector("#main")
     const mainContainerMedia = document.createElement("div")
@@ -143,11 +138,12 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
         let numberLikesMediaNoHeart = afterLikes[0]
         numberLikesMediaNoHeart = parseInt(numberLikesMediaNoHeart)
 
+
+
         e.addEventListener("click", element => {
             element.preventDefault()
-            console.log(numberLikesMediaNoHeart)
-            let result = classes.toggle("c");
 
+            let result = classes.toggle("c");
 
             if (result) {
                 e.innerHTML = ""
@@ -165,8 +161,8 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
             }
         })
 
-
         e.addEventListener("keydown", (element) => {
+            toggleLikes(classes, e, numberLikesMediaNoHeart, sumLikesInt, sumLikes)
             if (element.key == "Enter") {
                 let result = classes.toggle("c");
                 if (result) {
@@ -185,12 +181,7 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
                 }
             }
         })
-
-
-
-
     })
-
 }
 async function displayPhotographe(gallery, tabIndex) {
     const { photographe } = await getPhotographer()
@@ -199,19 +190,6 @@ async function displayPhotographe(gallery, tabIndex) {
     createPhotographerDisplay(photographe, mediaPhotographe)
 
     createMediaDisplay(mediaPhotographe, photographe.name, gallery, tabIndex)
-
-    //On récupére les photos de l'objet mediaPhotographe
-    console.log(mediaPhotographe)
-
-    //SI ça finis par jpg retourn l'url de l'image sinon retourne l'url de la video
-    const testIfImage = /(?:jpg)$|(?:png)$/g
-
-    console.log(gallery)
-
-
-
-
-    // test patterns tri
 
     const SelectActions = {
         Close: 0,
