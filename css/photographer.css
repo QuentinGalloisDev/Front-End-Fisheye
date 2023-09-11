@@ -116,9 +116,10 @@
 
 
 .combo {
-    display: block;
+    background-color: #901C1C;
+    display: flex;
     margin-bottom: 1.5em;
-    max-width: 400px;
+    max-width: 255px;
     position: relative;
 }
 
@@ -126,23 +127,19 @@
 .combo svg {
     background-image: url("../assets/icons/sortArrow.svg");
     background-repeat: no-repeat;
-    position: relative;
-    top: -30px;
-    left: 130px;
-    width: 160px;
+    width: 20%;
+    align-self: center;
     height: 16px;
 }
 
 .open svg {
-    transform: translate(-140px, -5px) rotate(180deg);
+    transform: translate(-22px, -5px) rotate(180deg);
 }
 
 .combo-input {
     background-color: #901C1C;
     color: #FFFFFF;
-    border: 2px solid rgb(0 0 0 / 75%);
-    border-radius: 4px;
-    display: block;
+    display: flex;
     font-size: 1em;
     min-height: calc(1.4em + 26px);
     padding: 12px 50px 14px 14px;
@@ -152,12 +149,6 @@
 
 .open .combo-input {
     border-radius: 4px 4px 0 0;
-}
-
-.combo-input:focus {
-    border-color: #0067b8;
-    box-shadow: 0 0 4px 2px #0067b8;
-    outline: 4px solid transparent;
 }
 
 .combo-label {

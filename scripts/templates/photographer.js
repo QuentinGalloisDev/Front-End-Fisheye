@@ -1,4 +1,4 @@
-function photographerTemplate(data) {
+function photographerTemplate(data, tabIndex) {
     const { name, portrait, city, country, tagline, price, id } = data;
     // On récupére les portraits des photographes dans le dossier assets
     const picture = `assets/photographers/${portrait}`;
@@ -8,6 +8,7 @@ function photographerTemplate(data) {
 
         const article = document.createElement('article');
         const lien = document.createElement('a')
+        lien.setAttribute("tabIndex", `${tabIndex}`)
         const img = document.createElement('img');
         const paragraphLocation = document.createElement('p')
         const paragraphTagline = document.createElement('p')

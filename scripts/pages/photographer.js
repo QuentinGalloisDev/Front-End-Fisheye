@@ -138,47 +138,34 @@ async function createMediaDisplay(medias, photographName, gallery, tabIndex) {
         let numberLikesMediaNoHeart = afterLikes[0]
         numberLikesMediaNoHeart = parseInt(numberLikesMediaNoHeart)
 
-
-
-        e.addEventListener("click", element => {
-            element.preventDefault()
+        const toggleLikes = (event) => {
+            event.preventDefault();
 
             let result = classes.toggle("c");
 
             if (result) {
-                e.innerHTML = ""
-                e.innerHTML = `${numberLikesMediaNoHeart + 1} ${heartSvg}`
-                sumLikes.innerHTML = ""
-                sumLikesInt += 1
-                sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
+                e.innerHTML = "";
+                e.innerHTML = `${numberLikesMediaNoHeart + 1} ${heartSvg}`;
+                sumLikes.innerHTML = "";
+                sumLikesInt += 1;
+                sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`;
+            } else {
+                e.innerHTML = "";
+                e.innerHTML = `${numberLikesMediaNoHeart} ${heartSvg}`;
+                sumLikes.innerHTML = "";
+                sumLikesInt -= 1;
+                sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`;
             }
-            else {
-                e.innerHTML = ""
-                e.innerHTML = `${numberLikesMediaNoHeart} ${heartSvg}`
-                sumLikes.innerHTML = ""
-                sumLikesInt -= 1
-                sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
-            }
+        };
+
+        e.addEventListener("click", (event) => {
+            toggleLikes(event)
         })
 
-        e.addEventListener("keydown", (element) => {
-            toggleLikes(classes, e, numberLikesMediaNoHeart, sumLikesInt, sumLikes)
+        e.addEventListener("keydown", (event) => {
+
             if (element.key == "Enter") {
-                let result = classes.toggle("c");
-                if (result) {
-                    e.innerHTML = ""
-                    e.innerHTML = `${numberLikesMediaNoHeart + 1} ${heartSvg}`
-                    sumLikes.innerHTML = ""
-                    sumLikesInt += 1
-                    sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
-                }
-                else {
-                    e.innerHTML = ""
-                    e.innerHTML = `${numberLikesMediaNoHeart} ${heartSvg}`
-                    sumLikes.innerHTML = ""
-                    sumLikesInt -= 1
-                    sumLikes.innerHTML = `${sumLikesInt} ${heartSvg}`
-                }
+                toggleLikes(event)
             }
         })
     })
@@ -641,6 +628,7 @@ async function displayPhotographe(gallery, tabIndex) {
 
     // Save a list of named combobox actions, for future readability
     const options = [
+        'Choisir une option',
         'Popularité',
         'Titre',
         'Date',
